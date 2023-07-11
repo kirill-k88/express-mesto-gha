@@ -1,23 +1,16 @@
 const Card = require('../models/card');
+const { handleError } = require('./handleError');
 
 module.exports.getAllCards = (req, res) => {
-  Card.find({ df: 'df' })
+  Card.find({})
     .then((cards) => res.send({ data: cards }))
-    .catch((err) =>
-      res
-        .status(404)
-        .send({ message: `Произошла ошибка чтения карточек. Ошибка ${err}` })
-    );
+    .catch((err) => handleError(err, res));
 };
 
 module.exports.deleteCard = (req, res) => {
   Card.findByIdAndRemove(req.params.cardId)
     .then((card) => res.send({ data: card }))
-    .catch((err) =>
-      res
-        .status(404)
-        .send({ message: `Произошла ошибка удаления карточки. Ошибка ${err}` })
-    );
+    .catch((err) => handleError(err, res));
 };
 
 module.exports.createCard = (req, res) => {
@@ -25,37 +18,27 @@ module.exports.createCard = (req, res) => {
   const owner = req.user;
   Card.create({ name, link, owner })
     .then((card) => res.send({ data: { card } }))
-    .catch((err) =>
-      res
-        .status(400)
-        .send({ message: `Произошла ошибка создания карточки. Ошибка ${err}` })
-    );
+    .catch((err) => handleError(err, res));
 };
+
+const returnNewData = { new: true };
 
 module.exports.likeCard = (req, res) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: req.user._id } },
-    { new: true }
+    returnNewData,
   )
     .then((card) => res.send({ data: { card } }))
-    .catch((err) =>
-      res
-        .status(404)
-        .send({ message: `Произошла ошибка при лайке карточки. Ошибка ${err}` })
-    );
+    .catch((err) => handleError(err, res));
 };
 
 module.exports.dislikeCard = (req, res) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $pull: { likes: req.user._id } },
-    { new: true }
+    returnNewData,
   )
     .then((card) => res.send({ data: { card } }))
-    .catch((err) =>
-      res.status(500).send({
-        message: `Произошла ошибка при дизлайке карточки. Ошибка ${err}`,
-      })
-    );
+    .catch((err) => handleError(err, res));
 };
