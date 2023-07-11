@@ -19,14 +19,29 @@ class CastError extends Error {
   }
 }
 
+class ValidationError extends Error {
+  constructor() {
+    super();
+    this.name = 'ValidationError';
+  }
+}
+
 const chackResult = (data, res) => {
   if (!data) {
-    throw new CastError();
+    return Promise.reject(new CastError());
   }
-  res.send({ data });
+  res.send(data);
+};
+
+const chackId = (id) => {
+  if (id.length < 20) {
+    return Promise.reject(new ValidationError());
+  }
+  return Promise.resolve();
 };
 
 module.exports = {
   handleError,
   chackResult,
+  chackId,
 };

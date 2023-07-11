@@ -1,5 +1,5 @@
 const Card = require('../models/card');
-const { handleError } = require('./handleError');
+const { handleError, chackId } = require('./handleError');
 
 module.exports.getAllCards = (req, res) => {
   Card.find({})
@@ -21,24 +21,34 @@ module.exports.createCard = (req, res) => {
     .catch((err) => handleError(err, res));
 };
 
-const returnNewData = { new: true };
-
 module.exports.likeCard = (req, res) => {
-  Card.findByIdAndUpdate(
-    req.params.cardId,
-    { $addToSet: { likes: req.user._id } },
-    returnNewData,
-  )
-    .then((card) => res.send({ data: { card } }))
+  chackId(req.params.cardId)
+    .then(() => {
+      return Card.findByIdAndUpdate(
+        req.params.cardId,
+        { $addToSet: { likes: req.user._id } },
+        {
+          new: true,
+          runValidators: true,
+        },
+      );
+    })
+    .then((card) => res.send({ data: card }))
     .catch((err) => handleError(err, res));
 };
 
 module.exports.dislikeCard = (req, res) => {
-  Card.findByIdAndUpdate(
-    req.params.cardId,
-    { $pull: { likes: req.user._id } },
-    returnNewData,
-  )
-    .then((card) => res.send({ data: { card } }))
+  chackId(req.params.cardId)
+    .then(() => {
+      return Card.findByIdAndUpdate(
+        req.params.cardId,
+        { $pull: { likes: req.user._id } },
+        {
+          new: true,
+          runValidators: true,
+        },
+      );
+    })
+    .then((card) => res.send({ data: card }))
     .catch((err) => handleError(err, res));
 };
