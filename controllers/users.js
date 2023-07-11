@@ -24,7 +24,7 @@ module.exports.createUser = (req, res) => {
   User.create(req.body)
     .then((user) => res.send({ data: user }))
     .catch((err) =>
-      res.status(500).send({
+      res.status(400).send({
         message: `Произошла ошибка создания пользователя. Ошибка ${err}`,
       })
     );

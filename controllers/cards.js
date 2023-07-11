@@ -1,11 +1,11 @@
 const Card = require('../models/card');
 
 module.exports.getAllCards = (req, res) => {
-  Card.find({})
+  Card.find({ df: 'df' })
     .then((cards) => res.send({ data: cards }))
     .catch((err) =>
       res
-        .status(500)
+        .status(404)
         .send({ message: `Произошла ошибка чтения карточек. Ошибка ${err}` })
     );
 };
@@ -15,7 +15,7 @@ module.exports.deleteCard = (req, res) => {
     .then((card) => res.send({ data: card }))
     .catch((err) =>
       res
-        .status(500)
+        .status(404)
         .send({ message: `Произошла ошибка удаления карточки. Ошибка ${err}` })
     );
 };
@@ -27,7 +27,7 @@ module.exports.createCard = (req, res) => {
     .then((card) => res.send({ data: { card } }))
     .catch((err) =>
       res
-        .status(500)
+        .status(400)
         .send({ message: `Произошла ошибка создания карточки. Ошибка ${err}` })
     );
 };
@@ -41,7 +41,7 @@ module.exports.likeCard = (req, res) => {
     .then((card) => res.send({ data: { card } }))
     .catch((err) =>
       res
-        .status(500)
+        .status(404)
         .send({ message: `Произошла ошибка при лайке карточки. Ошибка ${err}` })
     );
 };
@@ -54,10 +54,8 @@ module.exports.dislikeCard = (req, res) => {
   )
     .then((card) => res.send({ data: { card } }))
     .catch((err) =>
-      res
-        .status(500)
-        .send({
-          message: `Произошла ошибка при дизлайке карточки. Ошибка ${err}`,
-        })
+      res.status(500).send({
+        message: `Произошла ошибка при дизлайке карточки. Ошибка ${err}`,
+      })
     );
 };
