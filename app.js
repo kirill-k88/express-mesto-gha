@@ -8,6 +8,7 @@ const {
 } = process.env;
 
 const usersRouter = require('./routes/users');
+const cardsRouter = require('./routes/cards');
 
 mongoose
   .connect(MONGODB_CONNECTION, {})
@@ -23,7 +24,17 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use('/', usersRouter);
+app.use('/users', usersRouter);
+
+// Временная имитация передачи id пользователя
+app.use('/cards', (req, res, next) => {
+  req.user = {
+    _id: '64ad2a7755a84ce9665669e6',
+  };
+  next();
+});
+
+app.use('/cards', cardsRouter);
 
 app.listen(SERVER_PORT, (err) => {
   if (err) {
