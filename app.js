@@ -24,16 +24,14 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use('/users', usersRouter);
-
 // Временная имитация передачи id пользователя
-app.use('/cards', (req, res, next) => {
+app.use('/', (req, res, next) => {
   req.user = {
     _id: '64ad2a7755a84ce9665669e6',
   };
   next();
 });
-
+app.use('/users', usersRouter);
 app.use('/cards', cardsRouter);
 
 app.listen(SERVER_PORT, (err) => {
