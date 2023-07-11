@@ -17,7 +17,7 @@ module.exports.createCard = (req, res) => {
   const { name, link } = req.body;
   const owner = req.user;
   Card.create({ name, link, owner })
-    .then((card) => res.send({ data: { card } }))
+    .then((card) => res.send({ data: card }))
     .catch((err) => handleError(err, res));
 };
 
