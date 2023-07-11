@@ -8,9 +8,16 @@ module.exports.getAllUsers = (req, res) => {
     );
 };
 
+module.exports.getUser = (req, res) => {
+  User.findById(req.params.userId)
+    .then((user) => res.send({ data: user }))
+    .catch(() =>
+      res.status(500).send({ message: 'Произошла ошибка чтения пользователя' })
+    );
+};
+
 module.exports.createUser = (req, res) => {
-  const { name, about, avatar } = req.body;
-  User.create({ name, about, avatar })
+  User.create(req.body)
     .then((user) => res.send({ data: user }))
     .catch(() =>
       res
