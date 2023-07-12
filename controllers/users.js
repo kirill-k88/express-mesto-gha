@@ -1,5 +1,5 @@
 const User = require('../models/user');
-const { handleError, chackResult } = require('./handleError');
+const { handleError, chackResult, chackId } = require('./handleError');
 
 module.exports.getAllUsers = (req, res) => {
   User.find({})
@@ -8,7 +8,8 @@ module.exports.getAllUsers = (req, res) => {
 };
 
 module.exports.getUser = (req, res) => {
-  User.findById(req.params.userId)
+  chackId(req.params.cardId)
+    .then(() => User.findById(req.params.userId))
     .then((user) => chackResult(user, res))
     .catch((err) => handleError(err, res));
 };

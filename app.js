@@ -35,6 +35,7 @@ app.use('/', (req, res, next) => {
 app.use('/users', usersRouter);
 app.use('/cards', cardsRouter);
 
+//  Если задан маршрут, на который нет соответствующего endpoint
 app.use((req, res, next) => {
   res.status(404).send({ message: 'Такого маршрута не существует' });
   next();
