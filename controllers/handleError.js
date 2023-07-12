@@ -1,3 +1,6 @@
+const ValidationError = require('./ValidationError');
+const CastError = require('./CastError');
+
 const handleError = (err, res) => {
   if (err.name === 'ValidationError') {
     return res.status(400).send({
@@ -12,25 +15,11 @@ const handleError = (err, res) => {
   return res.status(500).send({ message: 'Ошибка по умолчанию' });
 };
 
-class CastError extends Error {
-  constructor() {
-    super();
-    this.name = 'CastError';
-  }
-}
-
-class ValidationError extends Error {
-  constructor() {
-    super();
-    this.name = 'ValidationError';
-  }
-}
-
 const chackResult = (data, res) => {
   if (!data) {
     return Promise.reject(new CastError());
   }
-  res.send(data);
+  return res.send(data);
 };
 
 const chackId = (id) => {

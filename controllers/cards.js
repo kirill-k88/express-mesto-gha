@@ -23,32 +23,28 @@ module.exports.createCard = (req, res) => {
 
 module.exports.likeCard = (req, res) => {
   chackId(req.params.cardId)
-    .then(() => {
-      return Card.findByIdAndUpdate(
-        req.params.cardId,
-        { $addToSet: { likes: req.user._id } },
-        {
-          new: true,
-          runValidators: true,
-        },
-      );
-    })
+    .then(() => Card.findByIdAndUpdate(
+      req.params.cardId,
+      { $addToSet: { likes: req.user._id } },
+      {
+        new: true,
+        runValidators: true,
+      },
+    ))
     .then((card) => res.send({ data: card }))
     .catch((err) => handleError(err, res));
 };
 
 module.exports.dislikeCard = (req, res) => {
   chackId(req.params.cardId)
-    .then(() => {
-      return Card.findByIdAndUpdate(
-        req.params.cardId,
-        { $pull: { likes: req.user._id } },
-        {
-          new: true,
-          runValidators: true,
-        },
-      );
-    })
+    .then(() => Card.findByIdAndUpdate(
+      req.params.cardId,
+      { $pull: { likes: req.user._id } },
+      {
+        new: true,
+        runValidators: true,
+      },
+    ))
     .then((card) => res.send({ data: card }))
     .catch((err) => handleError(err, res));
 };
