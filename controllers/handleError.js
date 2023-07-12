@@ -25,7 +25,8 @@ const chackResult = (data, res) => {
 };
 
 const chackId = (id) => {
-  if (id.match(/[a-z0-9]{24}/)) {
+  const regexp = /[a-z0-9]{24}/;
+  if (!regexp.test(id)) {
     const err = new Error();
     err.name = 'ValidationError';
     return Promise.reject(err);
