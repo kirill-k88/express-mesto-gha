@@ -9,7 +9,7 @@ module.exports.getAllUsers = (req, res) => {
 
 module.exports.getUser = (req, res) => {
   User.findById(req.params.userId)
-    .then((user) => res.send(user))
+    .then((user) => chackResult(user, res))
     .catch((err) => handleError(err, res));
 };
 

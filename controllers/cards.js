@@ -10,7 +10,7 @@ module.exports.getAllCards = (req, res) => {
 module.exports.deleteCard = (req, res) => {
   chackId(req.params.cardId)
     .then(() => Card.findByIdAndRemove(req.params.cardId))
-    .then((card) => res.send(card))
+    .then((card) => chackResult(card, res))
     .catch((err) => handleError(err, res));
 };
 
@@ -32,7 +32,7 @@ module.exports.likeCard = (req, res) => {
         runValidators: true,
       },
     ))
-    .then((card) => res.send(card))
+    .then((card) => chackResult(card, res))
     .catch((err) => handleError(err, res));
 };
 
@@ -46,6 +46,6 @@ module.exports.dislikeCard = (req, res) => {
         runValidators: true,
       },
     ))
-    .then((card) => res.send(card))
+    .then((card) => chackResult(card, res))
     .catch((err) => handleError(err, res));
 };
