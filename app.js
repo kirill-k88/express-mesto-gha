@@ -35,8 +35,9 @@ app.use('/', (req, res, next) => {
 app.use('/users', usersRouter);
 app.use('/cards', cardsRouter);
 
-app.get('*', (req, res) => {
+app.use((req, res, next) => {
   res.status(404).send({ message: 'Такого маршрута не существует' });
+  next();
 });
 
 app.listen(SERVER_PORT, (err) => {
