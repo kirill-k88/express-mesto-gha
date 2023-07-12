@@ -8,7 +8,7 @@ module.exports.getAllUsers = (req, res) => {
 };
 
 module.exports.getUser = (req, res) => {
-  chackId(req.params.cardId)
+  chackId(req.params.userId)
     .then(() => User.findById(req.params.userId))
     .then((user) => chackResult(user, res))
     .catch((err) => handleError(err, res));
