@@ -8,8 +8,9 @@ module.exports.getAllCards = (req, res) => {
 };
 
 module.exports.deleteCard = (req, res) => {
-  Card.findByIdAndRemove(req.params.cardId)
-    .then((card) => res.send({ data: card }))
+  chackId(req.params.cardId)
+    .then(() => Card.findByIdAndRemove(req.params.cardId))
+    .then((card) => res.send(card))
     .catch((err) => handleError(err, res));
 };
 
@@ -23,28 +24,32 @@ module.exports.createCard = (req, res) => {
 
 module.exports.likeCard = (req, res) => {
   chackId(req.params.cardId)
-    .then(() => Card.findByIdAndUpdate(
-      req.params.cardId,
-      { $addToSet: { likes: req.user._id } },
-      {
-        new: true,
-        runValidators: true,
-      },
-    ))
+    .then(() =>
+      Card.findByIdAndUpdate(
+        req.params.cardId,
+        { $addToSet: { likes: req.user._id } },
+        {
+          new: true,
+          runValidators: true,
+        },
+      ),
+    )
     .then((card) => chackResult(card, res))
     .catch((err) => handleError(err, res));
 };
 
 module.exports.dislikeCard = (req, res) => {
   chackId(req.params.cardId)
-    .then(() => Card.findByIdAndUpdate(
-      req.params.cardId,
-      { $pull: { likes: req.user._id } },
-      {
-        new: true,
-        runValidators: true,
-      },
-    ))
+    .then(() =>
+      Card.findByIdAndUpdate(
+        req.params.cardId,
+        { $pull: { likes: req.user._id } },
+        {
+          new: true,
+          runValidators: true,
+        },
+      ),
+    )
     .then((card) => chackResult(card, res))
     .catch((err) => handleError(err, res));
 };
