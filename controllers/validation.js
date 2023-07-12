@@ -9,7 +9,7 @@ const handleError = (err, res) => {
       message: 'Данных по указанному _id не найдено',
     });
   }
-  return res.status(500).send({ message: 'Ошибка по умолчанию' });
+  return res.status(500).send({ message: 'На сервере произошла ошибка' });
 };
 
 const chackResult = (data, res) => {

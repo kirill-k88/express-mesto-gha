@@ -37,7 +37,7 @@ app.use('/cards', cardsRouter);
 
 //  Если запрошен endpoint, на который нет соответствующего роута
 app.use((req, res, next) => {
-  res.status(404).send({ message: 'Такого маршрута не существует' });
+  res.status(404).send({ message: 'был запрошен несуществующий роут' });
   next();
 });
 
