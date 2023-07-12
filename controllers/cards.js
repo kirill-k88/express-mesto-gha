@@ -1,5 +1,5 @@
 const Card = require('../models/card');
-const { handleError, chackId } = require('./handleError');
+const { handleError, chackResult, chackId } = require('./handleError');
 
 module.exports.getAllCards = (req, res) => {
   Card.find({})
@@ -31,7 +31,7 @@ module.exports.likeCard = (req, res) => {
         runValidators: true,
       },
     ))
-    .then((card) => res.send({ data: card }))
+    .then((card) => chackResult(card, res))
     .catch((err) => handleError(err, res));
 };
 
