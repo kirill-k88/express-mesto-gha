@@ -3,25 +3,19 @@ const { handleError, chackResult } = require('./handleError');
 
 module.exports.getAllUsers = (req, res) => {
   User.find({})
-    .then((users) => res.send({ data: users }))
+    .then((users) => res.send(users))
     .catch((err) => handleError(err, res));
 };
 
-/* module.exports.getUser = (req, res) => {
-  User.findById(req.params.userId)
-    .then((user) => res.send({ data: user }))
-    .catch((err) => handleError(err, res));
-}; */
-
 module.exports.getUser = (req, res) => {
   User.findById(req.params.userId)
-    .then((user) => chackResult(user, res))
+    .then((user) => res.send(user))
     .catch((err) => handleError(err, res));
 };
 
 module.exports.createUser = (req, res) => {
   User.create(req.body)
-    .then((user) => res.send({ data: user }))
+    .then((user) => res.send(user))
     .catch((err) => handleError(err, res));
 };
 
@@ -30,6 +24,6 @@ module.exports.updateUser = (req, res) => {
     new: true,
     runValidators: true,
   })
-    .then((user) => res.send({ data: user }))
+    .then((user) => res.send(user))
     .catch((err) => handleError(err, res));
 };
