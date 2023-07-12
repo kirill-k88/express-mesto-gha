@@ -23,7 +23,7 @@ const chackResult = (data, res) => {
 };
 
 const chackId = (id) => {
-  if (id.length < 20) {
+  if (/[a-z0-9]{24}/.test(id)) {
     return Promise.reject(new ValidationError());
   }
   return Promise.resolve();
