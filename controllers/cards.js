@@ -45,6 +45,6 @@ module.exports.dislikeCard = (req, res) => {
         runValidators: true,
       },
     ))
-    .then((card) => res.send({ data: card }))
+    .then((card) => chackResult(card, res))
     .catch((err) => handleError(err, res));
 };
