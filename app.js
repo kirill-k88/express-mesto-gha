@@ -35,6 +35,10 @@ app.use('/', (req, res, next) => {
 app.use('/users', usersRouter);
 app.use('/cards', cardsRouter);
 
+app.get('*', (req, res) => {
+  res.status(404).send({ message: 'Такого маршрута не существует' });
+});
+
 app.listen(SERVER_PORT, (err) => {
   if (err) {
     console.log(`Ошибка подписки на порт. Ошибка:${err}`);
