@@ -16,3 +16,4 @@ https://github.com/kirill-k88/express-mesto-gha
 
 `npm run start` — запускает сервер  
 `npm run dev` — запускает сервер с hot-reload
+`npm run lint` — запускает проверку eslint
