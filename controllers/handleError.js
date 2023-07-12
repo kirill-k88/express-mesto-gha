@@ -1,5 +1,5 @@
-const ValidationError = require('./ValidationError');
-const CastError = require('./CastError');
+/* const ValidationError = require('./ValidationError');
+const CastError = require('./CastError'); */
 
 const handleError = (err, res) => {
   if (err.name === 'ValidationError') {
@@ -17,14 +17,18 @@ const handleError = (err, res) => {
 
 const chackResult = (data, res) => {
   if (!data) {
-    return Promise.reject(new CastError());
+    const err = new Error();
+    err.name = 'CastError';
+    return Promise.reject(err);
   }
   return res.send(data);
 };
 
 const chackId = (id) => {
   if (/[a-z0-9]{24}/.test(id)) {
-    return Promise.reject(new ValidationError());
+    const err = new Error();
+    err.name = 'ValidationError';
+    return Promise.reject(err);
   }
   return Promise.resolve();
 };
