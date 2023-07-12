@@ -1,5 +1,5 @@
 const User = require('../models/user');
-const { handleError, chackResult, chackId } = require('./handleError');
+const { handleError, chackResult, chackId } = require('./validation');
 
 module.exports.getAllUsers = (req, res) => {
   User.find({})

@@ -1,6 +1,3 @@
-/* const ValidationError = require('./ValidationError');
-const CastError = require('./CastError'); */
-
 const handleError = (err, res) => {
   if (err.name === 'ValidationError') {
     return res.status(400).send({

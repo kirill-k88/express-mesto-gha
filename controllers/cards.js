@@ -1,5 +1,5 @@
 const Card = require('../models/card');
-const { handleError, chackResult, chackId } = require('./handleError');
+const { handleError, chackResult, chackId } = require('./validation');
 
 module.exports.getAllCards = (req, res) => {
   Card.find({})
