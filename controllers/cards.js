@@ -1,5 +1,5 @@
 const Card = require('../models/card');
-const { handleError, chackResult, chackId } = require('./validation');
+const { handleError, checkResult, checkId } = require('./validation');
 
 module.exports.getAllCards = (req, res) => {
   Card.find({})
@@ -8,9 +8,9 @@ module.exports.getAllCards = (req, res) => {
 };
 
 module.exports.deleteCard = (req, res) => {
-  chackId(req.params.cardId)
+  checkId(req.params.cardId)
     .then(() => Card.findByIdAndRemove(req.params.cardId))
-    .then((card) => chackResult(card, res))
+    .then((card) => checkResult(card, res))
     .catch((err) => handleError(err, res));
 };
 
@@ -23,7 +23,7 @@ module.exports.createCard = (req, res) => {
 };
 
 module.exports.likeCard = (req, res) => {
-  chackId(req.params.cardId)
+  checkId(req.params.cardId)
     .then(() => Card.findByIdAndUpdate(
       req.params.cardId,
       { $addToSet: { likes: req.user._id } },
@@ -32,12 +32,12 @@ module.exports.likeCard = (req, res) => {
         runValidators: true,
       },
     ))
-    .then((card) => chackResult(card, res))
+    .then((card) => checkResult(card, res))
     .catch((err) => handleError(err, res));
 };
 
 module.exports.dislikeCard = (req, res) => {
-  chackId(req.params.cardId)
+  checkId(req.params.cardId)
     .then(() => Card.findByIdAndUpdate(
       req.params.cardId,
       { $pull: { likes: req.user._id } },
@@ -46,6 +46,6 @@ module.exports.dislikeCard = (req, res) => {
         runValidators: true,
       },
     ))
-    .then((card) => chackResult(card, res))
+    .then((card) => checkResult(card, res))
     .catch((err) => handleError(err, res));
 };
