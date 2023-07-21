@@ -6,8 +6,6 @@ const {
   checkResult,
   checkId,
   checkEmail,
-  checkUser,
-  checkPassword,
 } = require('./validation');
 
 module.exports.getAllUsers = (req, res) => {
@@ -45,9 +43,7 @@ module.exports.updateUser = (req, res) => {
 
 module.exports.login = (req, res) => {
   checkEmail(req.body.email)
-    .then(() => User.findOne({ email: req.body.email }))
-    .then((user) => checkUser(req.body.password, user))
-    .then(checkPassword)
-    .then((msg) => res.send(msg))
+    .then(() => User.findUserByCredentials(req.body.email, req.body.password))
+    .then((user) => res.send(user))
     .catch((err) => handleError(err, res));
 };

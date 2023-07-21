@@ -1,5 +1,4 @@
 const validator = require('validator');
-const bcrypt = require('bcryptjs');
 
 const customError = new Error();
 
@@ -40,20 +39,4 @@ module.exports.checkEmail = (email) => {
     return Promise.reject(customError);
   }
   return Promise.resolve();
-};
-
-module.exports.checkUser = (password, user) => {
-  if (!user) {
-    customError.name = 'ValidationError';
-    return Promise.reject(customError);
-  }
-  return bcrypt.compare(password, user.password);
-};
-
-module.exports.checkPassword = (matched, user) => {
-  if (!matched) {
-    customError.name = 'ValidationError';
-    return Promise.reject(customError);
-  }
-  return Promise.resolve('успешный вход');
 };
