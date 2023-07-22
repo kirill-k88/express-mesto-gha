@@ -13,6 +13,11 @@ module.exports.handleError = (err, res) => {
       message: 'Данных по указанному _id не найдено',
     });
   }
+  if (err.name === 'LoginError') {
+    return res.status(401).send({
+      message: 'Неправильные почта или пароль',
+    });
+  }
   return res.status(500).send({ message: 'На сервере произошла ошибка' });
 };
 
