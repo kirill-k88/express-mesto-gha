@@ -12,6 +12,8 @@ const cardsRouter = require('./routes/cards');
 
 const { createUser, login } = require('./controllers/users');
 
+const auth = require('./middlewares/auth');
+
 mongoose
   .connect(MONGODB_CONNECTION, {})
   .then(() => {
@@ -27,15 +29,17 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //  Временная имитация передачи id пользователя
-app.use('/', (req, res, next) => {
+/* app.use('/', (req, res, next) => {
   req.user = {
     _id: '64ad2a7755a84ce9665669e6',
   };
   next();
-});
+}); */
 
 app.post('/signin', login);
 app.post('/signup', createUser);
+app.use(auth);
+
 app.use('/users', usersRouter);
 app.use('/cards', cardsRouter);
 

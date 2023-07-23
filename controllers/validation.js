@@ -18,6 +18,12 @@ module.exports.handleError = (err, res) => {
       message: 'Неправильные почта или пароль',
     });
   }
+  if (err.name === 'NoRightsError') {
+    return res.status(401).send({
+      message: 'Нет прав на совершение действия',
+    });
+  }
+  console.log(err.name);
   return res.status(500).send({ message: 'На сервере произошла ошибка' });
 };
 
@@ -38,10 +44,10 @@ module.exports.checkId = (id) => {
   return Promise.resolve();
 };
 
-module.exports.checkEmail = (email) => {
-  if (!validator.isEmail(email)) {
-    customError.name = 'ValidationError';
-    return Promise.reject(customError);
-  }
+module.exports.checkEmail = (body) => {
+  customError.name = 'ValidationError';
+  if (!('email' in body)) return Promise.reject(customError);
+  if (!validator.isEmail(body.email)) return Promise.reject(customError);
+
   return Promise.resolve();
 };
