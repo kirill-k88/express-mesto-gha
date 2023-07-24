@@ -1,57 +1,48 @@
 const Card = require('../models/card');
-const { handleError, checkResult, checkId } = require('./validation');
+const { checkResult, checkDeleteCardResult } = require('./validation');
 
-module.exports.getAllCards = (req, res) => {
+module.exports.getAllCards = (req, res, next) => {
   Card.find({})
     .then((cards) => res.send(cards))
-    .catch((err) => handleError(err, res));
+    .catch(next);
 };
 
-module.exports.deleteCard = (req, res) => {
-  checkId(req.params.cardId)
-    .then(() =>
-      Card.findOneAndDelete({ _id: req.params.cardId, owner: req.user._id }),
-    )
-    .then((card) => checkResult(card, res))
-    .catch((err) => handleError(err, res));
+module.exports.deleteCard = (req, res, next) => {
+  Card.findOneAndDelete({ _id: req.params.cardId, owner: req.user._id })
+    .then((card) => checkDeleteCardResult(card, res))
+    .catch(next);
 };
 
-module.exports.createCard = (req, res) => {
+module.exports.createCard = (req, res, next) => {
   const { name, link } = req.body;
   const owner = req.user;
   Card.create({ name, link, owner })
     .then((card) => res.send(card))
-    .catch((err) => handleError(err, res));
+    .catch(next);
 };
 
-module.exports.likeCard = (req, res) => {
-  checkId(req.params.cardId)
-    .then(() =>
-      Card.findByIdAndUpdate(
-        req.params.cardId,
-        { $addToSet: { likes: req.user._id } },
-        {
-          new: true,
-          runValidators: true,
-        },
-      ),
-    )
+module.exports.likeCard = (req, res, next) => {
+  Card.findByIdAndUpdate(
+    req.params.cardId,
+    { $addToSet: { likes: req.user._id } },
+    {
+      new: true,
+      runValidators: true,
+    },
+  )
     .then((card) => checkResult(card, res))
-    .catch((err) => handleError(err, res));
+    .catch(next);
 };
 
-module.exports.dislikeCard = (req, res) => {
-  checkId(req.params.cardId)
-    .then(() =>
-      Card.findByIdAndUpdate(
-        req.params.cardId,
-        { $pull: { likes: req.user._id } },
-        {
-          new: true,
-          runValidators: true,
-        },
-      ),
-    )
+module.exports.dislikeCard = (req, res, next) => {
+  Card.findByIdAndUpdate(
+    req.params.cardId,
+    { $pull: { likes: req.user._id } },
+    {
+      new: true,
+      runValidators: true,
+    },
+  )
     .then((card) => checkResult(card, res))
-    .catch((err) => handleError(err, res));
+    .catch(next);
 };

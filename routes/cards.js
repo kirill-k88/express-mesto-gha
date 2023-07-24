@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const { celebrate, Joi } = require('celebrate');
 
 const {
   getAllCards,
@@ -9,9 +10,51 @@ const {
 } = require('../controllers/cards');
 
 router.get('/', getAllCards);
-router.delete('/:cardId', deleteCard);
-router.post('/', createCard);
-router.put('/:cardId/likes', likeCard);
-router.delete('/:cardId/likes', dislikeCard);
+router.delete(
+  '/:cardId',
+  celebrate({
+    params: Joi.object().keys({
+      cardId: Joi.string()
+        .alphanum()
+        .length(24)
+        .message('Передан некорректный id'),
+    }),
+  }),
+  deleteCard,
+);
+router.post(
+  '/',
+  celebrate({
+    body: Joi.object().keys({
+      name: Joi.string().required().min(2).max(30),
+      link: Joi.string().required().min(10),
+    }),
+  }),
+  createCard,
+);
+router.put(
+  '/:cardId/likes',
+  celebrate({
+    params: Joi.object().keys({
+      cardId: Joi.string()
+        .alphanum()
+        .length(24)
+        .message('Передан некорректный id'),
+    }),
+  }),
+  likeCard,
+);
+router.delete(
+  '/:cardId/likes',
+  celebrate({
+    params: Joi.object().keys({
+      cardId: Joi.string()
+        .alphanum()
+        .length(24)
+        .message('Передан некорректный id'),
+    }),
+  }),
+  dislikeCard,
+);
 
 module.exports = router;

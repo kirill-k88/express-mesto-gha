@@ -11,8 +11,11 @@ const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
 
 const { createUser, login } = require('./controllers/users');
+const { celebrate, Joi, errors } = require('celebrate');
 
 const auth = require('./middlewares/auth');
+const errorHandler = require('./middlewares/errorHandler');
+const NotFoundError = require('./controllers/NotFoundError');
 
 mongoose
   .connect(MONGODB_CONNECTION, {})
@@ -28,26 +31,46 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-//  Временная имитация передачи id пользователя
-/* app.use('/', (req, res, next) => {
-  req.user = {
-    _id: '64ad2a7755a84ce9665669e6',
-  };
-  next();
-}); */
-
-app.post('/signin', login);
-app.post('/signup', createUser);
+app.post(
+  '/signin',
+  celebrate({
+    body: Joi.object().keys({
+      email: Joi.string()
+        .required()
+        .email()
+        .message('Передано некорректное значение email'),
+      password: Joi.string()
+        .required()
+        .min(7)
+        .message('Передан некорректный пароль'),
+    }),
+  }),
+  login,
+);
+app.post(
+  '/signup',
+  celebrate({
+    body: Joi.object().keys({
+      email: Joi.string().required().email(),
+      password: Joi.string().required().min(7),
+      name: Joi.string().min(2).max(30),
+      avatar: Joi.string().min(10),
+      about: Joi.string().min(2).max(30),
+    }),
+  }),
+  createUser,
+);
 app.use(auth);
 
 app.use('/users', usersRouter);
 app.use('/cards', cardsRouter);
 
-//  Если запрошен endpoint, на который нет соответствующего роута
 app.use((req, res, next) => {
-  res.status(404).send({ message: 'был запрошен несуществующий роут' });
-  next();
+  next(new NotFoundError('Был запрошен несуществующий роут'));
 });
+
+app.use(errors());
+app.use(errorHandler);
 
 app.listen(SERVER_PORT, (err) => {
   if (err) {

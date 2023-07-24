@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const { celebrate, Joi } = require('celebrate');
 
 const {
   getAllUsers,
@@ -9,8 +10,29 @@ const {
 
 router.get('/', getAllUsers);
 router.get('/me', getCurrentUser);
-router.get('/:userId', getUser);
-router.patch('/me', updateUser);
+router.get(
+  '/:userId',
+  celebrate({
+    params: Joi.object().keys({
+      userId: Joi.string()
+        .alphanum()
+        .length(24)
+        .message('Передан некорректный id'),
+    }),
+  }),
+  getUser,
+);
+router.patch(
+  '/me',
+  celebrate({
+    body: Joi.object().keys({
+      name: Joi.string().min(2).max(30),
+      avatar: Joi.string().min(10),
+      about: Joi.string().min(2).max(30),
+    }),
+  }),
+  updateUser,
+);
 router.patch('/me/avatar', updateUser);
 
 module.exports = router;

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const uniqueValidator = require('mongoose-unique-validator');
 
-const customError = new Error();
+const AuthError = require('../controllers/AuthError');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -42,13 +42,15 @@ userSchema.statics.findUserByCredentials = function (email, password) {
     .select('+password')
     .then((user) => {
       if (!user) {
-        customError.name = 'LoginError';
-        return Promise.reject(customError);
+        return Promise.reject(
+          new AuthError('Неверные имя пользователя или пароль.'),
+        );
       }
       return bcrypt.compare(password, user.password).then((matched) => {
         if (!matched) {
-          customError.name = 'LoginError';
-          return Promise.reject(customError);
+          return Promise.reject(
+            new AuthError('Неверные имя пользователя или пароль.'),
+          );
         }
         return user;
       });
