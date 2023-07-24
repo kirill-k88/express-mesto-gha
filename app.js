@@ -54,7 +54,7 @@ app.post(
       email: Joi.string().required().email(),
       password: Joi.string().required().min(7),
       name: Joi.string().min(2).max(30),
-      avatar: Joi.string().min(10),
+      avatar: Joi.string().regex(/http.?\:\/\/.*\.[a-zA-z]{2,3}[\/?[\w]*]*/),
       about: Joi.string().min(2).max(30),
     }),
   }),
