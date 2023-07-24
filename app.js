@@ -7,11 +7,12 @@ const {
   MONGODB_CONNECTION = 'mongodb://127.0.0.1:27017/mestodb',
 } = process.env;
 
+const { celebrate, Joi, errors } = require('celebrate');
+
 const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
 
 const { createUser, login } = require('./controllers/users');
-const { celebrate, Joi, errors } = require('celebrate');
 
 const auth = require('./middlewares/auth');
 const errorHandler = require('./middlewares/errorHandler');
