@@ -1,5 +1,5 @@
 const NotFoundError = require('./NotFoundError');
-const ForbiddenError = require('./forbiddenError');
+const ForbiddenError = require('./ForbiddenError');
 
 module.exports.checkResult = (data, res) => {
   if (!data) {
