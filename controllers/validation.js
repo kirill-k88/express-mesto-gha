@@ -1,5 +1,5 @@
-const NotFoundError = require('./NotFoundError');
-const ForbiddenError = require('./ForbiddenError');
+const NotFoundError = require('../errorClasses/NotFoundError');
+const ForbiddenError = require('../errorClasses/ForbiddenError');
 
 module.exports.checkDeleteCardResult = (data) => {
   if (!data) {

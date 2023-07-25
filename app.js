@@ -16,7 +16,7 @@ const { createUser, login } = require('./controllers/users');
 
 const auth = require('./middlewares/auth');
 const errorHandler = require('./middlewares/errorHandler');
-const NotFoundError = require('./controllers/NotFoundError');
+const NotFoundError = require('./errorClasses/NotFoundError');
 
 mongoose
   .connect(MONGODB_CONNECTION, {})
