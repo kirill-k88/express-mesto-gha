@@ -8,8 +8,16 @@ module.exports.getAllCards = (req, res, next) => {
 };
 
 module.exports.deleteCard = (req, res, next) => {
-  Card.findOneAndDelete({ _id: req.params.cardId, owner: req.user._id })
-    .then((card) => checkDeleteCardResult(card, res))
+  Card.findOne({ _id: req.params.cardId })
+    .then(checkResult)
+    .then((card) =>
+      Card.findOneAndDelete({
+        _id: req.params.cardId,
+        owner: req.user._id,
+      }),
+    )
+    .then(checkDeleteCardResult)
+    .then((card) => res.send(card))
     .catch(next);
 };
 
@@ -30,7 +38,8 @@ module.exports.likeCard = (req, res, next) => {
       runValidators: true,
     },
   )
-    .then((card) => checkResult(card, res))
+    .then(checkResult)
+    .then((card) => res.send(card))
     .catch(next);
 };
 
@@ -43,6 +52,7 @@ module.exports.dislikeCard = (req, res, next) => {
       runValidators: true,
     },
   )
-    .then((card) => checkResult(card, res))
+    .then(checkResult)
+    .then((card) => res.send(card))
     .catch(next);
 };

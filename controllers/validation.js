@@ -1,22 +1,22 @@
 const NotFoundError = require('./NotFoundError');
 const ForbiddenError = require('./ForbiddenError');
 
-module.exports.checkResult = (data, res) => {
+module.exports.checkDeleteCardResult = (data) => {
+  if (!data) {
+    return Promise.reject(
+      new ForbiddenError(
+        'Карточка по указанному _id принадлежит другому пользователю',
+      ),
+    );
+  }
+  return data;
+};
+
+module.exports.checkResult = (data) => {
   if (!data) {
     return Promise.reject(
       new NotFoundError('Данных по указанному _id не найдено'),
     );
   }
-  return res.send(data);
-};
-
-module.exports.checkDeleteCardResult = (data, res) => {
-  if (!data) {
-    return Promise.reject(
-      new ForbiddenError(
-        'Карточки по указанному _id не найдено либо нет прав на ее удаление ',
-      ),
-    );
-  }
-  return res.send(data);
+  return data;
 };

@@ -13,12 +13,14 @@ module.exports.getAllUsers = (req, res, next) => {
 
 module.exports.getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
-    .then((user) => checkResult(user, res))
+    .then(checkResult)
+    .then((user) => res.send(user))
     .catch(next);
 };
 module.exports.getUser = (req, res, next) => {
   User.findById(req.params.userId)
-    .then((user) => checkResult(user, res))
+    .then(checkResult)
+    .then((user) => res.send(user))
     .catch(next);
 };
 
@@ -29,12 +31,14 @@ module.exports.createUser = (req, res, next) => {
       req.body.password = hash;
       return User.create(req.body);
     })
-    .then((user) => res.send({
-      name: user.name,
-      avatar: user.avatar,
-      about: user.about,
-      email: user.email,
-    }))
+    .then((user) =>
+      res.send({
+        name: user.name,
+        avatar: user.avatar,
+        about: user.about,
+        email: user.email,
+      }),
+    )
     .catch(next);
 };
 
