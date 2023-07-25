@@ -33,6 +33,14 @@ router.patch(
   }),
   updateUser,
 );
-router.patch('/me/avatar', updateUser);
+router.patch(
+  '/me/avatar',
+  celebrate({
+    body: Joi.object().keys({
+      avatar: Joi.string().regex(/http.?:\/\/.*\.[a-zA-z]{2,3}/),
+    }),
+  }),
+  updateUser,
+);
 
 module.exports = router;
