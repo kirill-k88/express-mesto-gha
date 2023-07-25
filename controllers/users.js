@@ -29,12 +29,14 @@ module.exports.createUser = (req, res, next) => {
       req.body.password = hash;
       return User.create(req.body);
     })
-    .then((user) => res.send({
-      name: user.name,
-      avatar: user.avatar,
-      about: user.about,
-      email: user.email,
-    }))
+    .then((user) =>
+      res.send({
+        name: user.name,
+        avatar: user.avatar,
+        about: user.about,
+        email: user.email,
+      }),
+    )
     .catch(next);
 };
 
@@ -57,7 +59,7 @@ module.exports.login = (req, res, next) => {
         maxAge: 604800000,
         httpOnly: true,
       }); */
-      return res.send(token);
+      return res.send({ token });
     })
     .catch(next);
 };
