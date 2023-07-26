@@ -1,5 +1,8 @@
 const router = require('express').Router();
-const { celebrate, Joi } = require('celebrate');
+const {
+  bodyIdValidator,
+  bodyCardValidator,
+} = require('../middlewares/celebrateValidation');
 
 const {
   getAllCards,
@@ -10,53 +13,9 @@ const {
 } = require('../controllers/cards');
 
 router.get('/', getAllCards);
-router.delete(
-  '/:cardId',
-  celebrate({
-    params: Joi.object().keys({
-      cardId: Joi.string()
-        .alphanum()
-        .length(24)
-        .message('Передан некорректный id'),
-    }),
-  }),
-  deleteCard,
-);
-router.post(
-  '/',
-  celebrate({
-    body: Joi.object().keys({
-      name: Joi.string().required().min(2).max(30),
-      link: Joi.string()
-        .required()
-        .regex(/http.?:\/\/.*\.[a-zA-z]{2,3}/),
-    }),
-  }),
-  createCard,
-);
-router.put(
-  '/:cardId/likes',
-  celebrate({
-    params: Joi.object().keys({
-      cardId: Joi.string()
-        .alphanum()
-        .length(24)
-        .message('Передан некорректный id'),
-    }),
-  }),
-  likeCard,
-);
-router.delete(
-  '/:cardId/likes',
-  celebrate({
-    params: Joi.object().keys({
-      cardId: Joi.string()
-        .alphanum()
-        .length(24)
-        .message('Передан некорректный id'),
-    }),
-  }),
-  dislikeCard,
-);
+router.delete('/:cardId', bodyIdValidator, deleteCard);
+router.post('/', bodyCardValidator, createCard);
+router.put('/:cardId/likes', bodyIdValidator, likeCard);
+router.delete('/:cardId/likes', bodyIdValidator, dislikeCard);
 
 module.exports = router;
