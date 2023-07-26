@@ -24,9 +24,15 @@ module.exports.bodySignupValidator = celebrate({
   }),
 });
 
-module.exports.bodyIdValidator = celebrate({
+module.exports.bodyCardIdValidator = celebrate({
   params: Joi.object().keys({
     cardId: Joi.string().length(24).hex().message('Передан некорректный id'),
+  }),
+});
+
+module.exports.bodyUserIdValidator = celebrate({
+  params: Joi.object().keys({
+    userId: Joi.string().length(24).hex().message('Передан некорректный id'),
   }),
 });
 

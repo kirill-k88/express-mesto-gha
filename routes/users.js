@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const {
-  bodyIdValidator,
+  bodyUserIdValidator,
   bodyUserValidator,
   bodyAvatarValidator,
 } = require('../middlewares/celebrateValidation');
@@ -14,7 +14,7 @@ const {
 
 router.get('/', getAllUsers);
 router.get('/me', getCurrentUser);
-router.get('/:userId', bodyIdValidator, getUser);
+router.get('/:userId', bodyUserIdValidator, getUser);
 router.patch('/me', bodyUserValidator, updateUser);
 router.patch('/me/avatar', bodyAvatarValidator, updateUser);
 
